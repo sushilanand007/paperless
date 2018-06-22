@@ -1,0 +1,26 @@
+ {
+    "name": "OAuth Tutorial FriendBlock",
+    "version": "1.0",
+    "description": "Uses OAuth to connect to Google's People API and display contacts photos.",
+    "manifest_version": 2,
+    "browser_action": {
+      "default_title": "FriendBlock, friends face's in a block.",
+      "default_popup": "popup.html"
+
+    },
+    "background": {
+      "scripts": [
+        "background.js"
+      ],
+      "persistent": false
+    },
+    "oauth2": {
+    "client_id": "6009866141-sd52dathcqlmdvd21t41m658hf9aencr.apps.googleusercontent.com",
+    "scopes":["https://www.googleapis.com/auth/plus.login"]
+  },
+  "permissions": [
+      "identity",
+      "identity.email"
+    ],
+    "key":"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhvBZxbP7HP1zb2uTA8UKUWWPA6YHVoeBcGvY8eAX+ZMFR2i79gCVia8rjTEApnJ7U4rxBcT+gQdmgN22G18/sA5rXZ3S2zzbSzcykUAbO2HE10Neh4ZtpohsbuYOGuTCBAFYMffXGDX7HaMP4Qx7pjGYZgYHCFYmzjjZGW/Z/6ZwtnyADhOmCC2aoLD+hZ8CZUY0BStzOx98/YkkPFI1vJA+IIEJ7VvUFE0R/Nz4NIceLzdJRaUTpLGEuqjNu2WzNMYomHF00VQO6Dsns4dsMGWYfxf4xfYQnAatpjIgKU/E51CVb4F3+QcWB1r23MJnQ64CLrAYEHM57ckQOfXINwIDAQAB"
+  }

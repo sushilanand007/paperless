@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#buttonid").click(function(){
+        $("#injectContent").before("<select name='cars'><option value='volvo'>Resume</option><option value='saab'>Payslips</option><option value='fiat'>Aadhar Card</option><option value='audi'>Pan Card</option><input type='file' multiple='multiple' name='fileUpload'/><br />");
+    });
+});
+</script>
+<script>
+    jQuery(function(){
+      jQuery('#buttonid').click();
+      $("#thanksMessage").hide();
+      $("#ErrorMessage").hide();
+    });
+</script>
+     <link rel="stylesheet" href="styles.css"/>
+  </head>
+  <body class="outer-div">
+    <h1>Hello World!</h1>
+
+
+<form action="" method="post" id="formId">
+<p id="injectContent"></p>
+<input type='submit' id='upload' value='upload' >
+</form>
+<script>
+$(document).ready(function() {
+$('#formId').submit(function(){
+
+$.ajax({
+type: "POST",
+url: "http://localhost:8000",
+crossDomain: true,
+data: 'html',
+success: function(html){
+    if(html == 'true'){
+        $('#formId').fadeOut('slow');
+       $("#thanksMessage").show();
+        alert('ok');
+    }else if(html == 'fail'){
+       alert('fail');
+       $("#ErrorMessage").show();
+
+    }
+}
+});
+    return false;
+});
+});
+</script>
+<button id="buttonid">Add more</button>
+  
+  <div id="thanksMessage">Thank you for Uploading</div>
+  <div id="ErrorMessage">Upload Failed</div>
+ </body>
+</html>
