@@ -87,7 +87,7 @@ public class PaperlessService {
     String folderId = null;
     if (null == result || result.isEmpty()) {
       File fileMetadata = new File();
-      fileMetadata.setName("Invoices");
+      fileMetadata.setName(name);
       fileMetadata.setMimeType("application/vnd.google-apps.folder");
 
       folderId = getDriveService().files().create(fileMetadata).setFields("id").execute().getId();
