@@ -35,7 +35,7 @@ public class PaperlessService {
   private static final String REFRESH_TOKEN_GOOGLE =
       "1/eXzOKa__RWo8zBPUuNPgx5qj93g_wy79DREPkhk4OME";
 
-  private static Credential getCredentials() throws IOException, GeneralSecurityException {
+  private Credential getCredentials() throws IOException, GeneralSecurityException {
     RefreshTokenRequest request =
         new GoogleRefreshTokenRequest(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY,
             REFRESH_TOKEN_GOOGLE, CLIENT_ID, CLIENT_SECRET);
@@ -47,14 +47,13 @@ public class PaperlessService {
         .setFromTokenResponse(response);
   }
 
-  private static Drive getDriveService() throws IOException, GeneralSecurityException {
+  private Drive getDriveService() throws IOException, GeneralSecurityException {
     NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials())
         .setApplicationName(APPLICATION_NAME).build();
   }
 
-  public static List<String> getMissingDocument(String name)
-      throws IOException, GeneralSecurityException {
+  public List<String> getMissingDocument(String name) throws IOException, GeneralSecurityException {
     List<DocumentTypes> missingDocuments = new ArrayList<>(Arrays.asList(DocumentTypes.values()));
     String nameQuery = "name contains '" + name + "'";
     FileList result =
@@ -71,7 +70,6 @@ public class PaperlessService {
         }
       }
     }
-    // return Stream.of(missingDocuments).map(DocumentTypes::getUiMenuLabel).collect(Collectors.toList());
     List<String> returnValue = new ArrayList<>();
     for (DocumentTypes missingDocument : missingDocuments) {
       returnValue.add(missingDocument.getUiMenuLabel());
@@ -79,8 +77,8 @@ public class PaperlessService {
     return returnValue;
   }
 
-  public static boolean uploadDocument(DocumentTypes documentType, String name, java.io.File file)
-      throws IOException, GeneralSecurityException {
+  public boolean uploadDocument(DocumentTypes documentType, String name, java.io.File file,
+      String mimeType) throws IOException, GeneralSecurityException {
     boolean success = false;
     String nameQuery = "name = '" + name + "'";
     List<File> result =
@@ -102,35 +100,12 @@ public class PaperlessService {
     fileMetadata.setName(fileName);
     fileMetadata.setParents(Collections.singletonList(folderId));
 
-    FileContent mediaContent = new FileContent("image/jpeg", file);
+    FileContent mediaContent = new FileContent(mimeType, file);
     File fileUploaded =
         getDriveService().files().create(fileMetadata, mediaContent).setSupportsTeamDrives(true)
             .setFields("id, parents").execute();
 
     return true;
-  }
-
-  public static void main(String... args) throws IOException, GeneralSecurityException {
-    // Print the names and IDs for up to 10 files.
-    List<String> result = getMissingDocument("krati.parakh");
-    System.out.println(result);
-
-    boolean uploadResult = uploadDocument(DocumentTypes.PASSPORT, "krati.parakh", new java.io.File(
-        "/Users/krati.parakh/Downloads/krati/My details/ID/krati.parakh-companyId.jpg"));
-
-
-    /* FileList result =
-        getDriveService().files().list().setPageSize(10).setFields("nextPageToken, files(id, name)")
-            .execute();
-    List<File> files = result.getFiles();
-    if (files == null || files.isEmpty()) {
-      System.out.println("No files found.");
-    } else {
-      System.out.println("Files:");
-      for (File file : files) {
-        System.out.printf("%s (%s)\n", file.getName(), file.getId());
-      }
-    } */
   }
 
 }
