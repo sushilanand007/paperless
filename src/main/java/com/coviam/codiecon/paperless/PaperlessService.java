@@ -79,7 +79,7 @@ public class PaperlessService {
     return returnValue;
   }
 
-  public boolean uploadDocument(DocumentTypes documentType, String name, java.io.File file)
+  public boolean uploadDocument(DocumentTypes documentType, String name, java.io.File file, String mimeType)
       throws IOException, GeneralSecurityException {
     boolean success = false;
     String nameQuery = "name = '" + name + "'";
@@ -102,7 +102,7 @@ public class PaperlessService {
     fileMetadata.setName(fileName);
     fileMetadata.setParents(Collections.singletonList(folderId));
 
-    FileContent mediaContent = new FileContent("image/jpeg", file);
+    FileContent mediaContent = new FileContent(mimeType, file);
     File fileUploaded =
         getDriveService().files().create(fileMetadata, mediaContent).setSupportsTeamDrives(true)
             .setFields("id, parents").execute();
