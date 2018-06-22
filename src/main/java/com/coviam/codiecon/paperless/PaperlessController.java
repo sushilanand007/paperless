@@ -24,7 +24,7 @@ public class PaperlessController {
   public Boolean uploadFile(@RequestBody UploadFileModel model) {
     // TODO set file and pass
     File file = null;
-    String mimeType = null;
+    String mimeType = model.getFile().getContentType().split("/")[0];
     try {
       return paperlessService
           .uploadDocument(model.getDocumentType(), model.getName(), file, mimeType);
