@@ -70,8 +70,6 @@ public class PaperlessService {
         }
       }
     }
-//    return Stream.of(missingDocuments).map(DocumentTypes::getUiMenuLabel)
-    //        .collect(Collectors.toList());
     List<String> returnValue = new ArrayList<>();
     for (DocumentTypes missingDocument : missingDocuments) {
       returnValue.add(missingDocument.getUiMenuLabel());
@@ -79,8 +77,8 @@ public class PaperlessService {
     return returnValue;
   }
 
-  public boolean uploadDocument(DocumentTypes documentType, String name, java.io.File file, String mimeType)
-      throws IOException, GeneralSecurityException {
+  public boolean uploadDocument(DocumentTypes documentType, String name, java.io.File file,
+      String mimeType) throws IOException, GeneralSecurityException {
     boolean success = false;
     String nameQuery = "name = '" + name + "'";
     List<File> result =
@@ -108,15 +106,6 @@ public class PaperlessService {
             .setFields("id, parents").execute();
 
     return true;
-  }
-
-  public static void main(String... args) throws IOException, GeneralSecurityException {
-    // Print the names and IDs for up to 10 files.
-    //    List<String> result = getMissingDocument("krati.parakh");
-    //    System.out.println(result);
-    //
-    //    boolean uploadResult = uploadDocument(DocumentTypes.PASSPORT, "krati.parakh", new java.io.File(
-    //        "/Users/krati.parakh/Downloads/krati/My details/ID/krati.parakh-companyId.jpg"));
   }
 
 }
