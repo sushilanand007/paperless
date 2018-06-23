@@ -39,7 +39,7 @@ public class PaperlessService {
       "1/0rCvzYCOPYytzoxpqhI2rMmQhBwLJ_f3OB72Zzh59tM";
 
   @Autowired
-  private UserRepository userRepository;
+  private UserService userService;
 
   private Credential getCredentials() throws IOException, GeneralSecurityException {
     RefreshTokenRequest request =
@@ -114,21 +114,9 @@ public class PaperlessService {
     return true;
   }
 
-  public List<String> getUserList() {
-    List<User> users = userRepository.findAll();
-
-    List<String> userList = new ArrayList<>(users.size());
-    if (users != null && !users.isEmpty()) {
-      for (User user : users) {
-        userList.add(user.getName());
-      }
-    }
-    return userList;
-  }
-
   public Map<String, List<String>> missingDocumentsReport()
       throws IOException, GeneralSecurityException {
-    List<String> users = getUserList();
+    List<String> users = userService.getUserList(null);
     if (!users.isEmpty()) {
       Map<String, List<String>> result = new HashMap<>();
       for (String user : users) {

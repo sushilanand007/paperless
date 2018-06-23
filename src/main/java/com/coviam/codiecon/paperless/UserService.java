@@ -3,6 +3,9 @@ package com.coviam.codiecon.paperless;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -21,7 +24,7 @@ public class UserService {
   }
 
   public UserModel findUser(String name) {
-    User user = userRepository.findByName(name);
+    User user = userRepository.findByNameIgnoreCase(name);
     if (null != user) {
       UserModel userModel = new UserModel();
       userModel.setName(user.getName());
@@ -32,4 +35,20 @@ public class UserService {
     }
   }
 
+  public List<String> getUserList(String name) {
+    List<User> users = null;
+    if (null == name) {
+      users = userRepository.findAll();
+    } else {
+      users = userRepository.findByNameContains(name);
+    }
+
+    List<String> userList = new ArrayList<>(users.size());
+    if (users != null && !users.isEmpty()) {
+      for (User user : users) {
+        userList.add(user.getName());
+      }
+    }
+    return userList;
+  }
 }
