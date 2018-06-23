@@ -1,14 +1,15 @@
 package com.coviam.codiecon.paperless;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
@@ -25,15 +26,21 @@ public class PaperlessController {
 
   @RequestMapping(value = "/paperless/upload", method = {RequestMethod.POST})
   @ResponseBody
-  public Boolean uploadFile(@RequestBody UploadFileModel model) {
+  public Boolean uploadFile(@RequestParam("file") MultipartFile multipartFile,
+      @RequestParam String documentType, @RequestParam String name) {
 
-    String mimeType = model.getFile().getContentType().split("/")[0];
+    String mimeType = multipartFile.getContentType();
     try {
-      File file = new File(model.getFile().getOriginalFilename());
-      model.getFile().transferTo(file);
-      return paperlessService
-          .uploadDocument(DocumentTypes.valueOf(model.getDocumentType()), model.getName(), file,
-              mimeType);
+      File convFile = new File(multipartFile.getOriginalFilename());
+      convFile.createNewFile();
+      FileOutputStream fos = new FileOutputStream(convFile);
+      fos.write(multipartFile.getBytes());
+      fos.close();
+
+      boolean success = paperlessService
+          .uploadDocument(DocumentTypes.getByUiMenuLabel(documentType), name, convFile, mimeType);
+      convFile.delete();
+      return success;
     } catch (IOException | GeneralSecurityException e) {
       e.printStackTrace();
       return false;

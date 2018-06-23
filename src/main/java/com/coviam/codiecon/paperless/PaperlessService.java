@@ -88,14 +88,14 @@ public class PaperlessService {
     String folderQuery =
         "name = '" + name + "' and mimeType = 'application/vnd.google-apps.folder'";
     List<File> result =
-        getDriveService().files().list().setIncludeTeamDriveItems(true).setPageSize(10)
-            .setQ(folderQuery).setSupportsTeamDrives(true).setPageSize(1).execute().getFiles();
+        getDriveService().files().list().setIncludeTeamDriveItems(true).setQ(folderQuery)
+            .setSupportsTeamDrives(true).setPageSize(1).execute().getFiles();
     String folderId = null;
     if (null == result || result.isEmpty()) {
       File fileMetadata = new File();
       fileMetadata.setName(name);
       fileMetadata.setMimeType("application/vnd.google-apps.folder");
-
+      fileMetadata.setParents(Collections.singletonList("1aAQIiTRH5IxsuNtm4bwCW8f0UeeWw574"));
       folderId = getDriveService().files().create(fileMetadata).setFields("id").execute().getId();
     } else {
       folderId = result.get(0).getId();
