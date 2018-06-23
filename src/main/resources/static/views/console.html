@@ -1,12 +1,29 @@
+<!DOCTYPE html>
 <html>
-
 <head>
-    <title>First Web Application</title>
+    <meta charset="ISO-8859-1">
+    <title>Main Page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/UserController.js"></script>
+    <script src="js/UserService.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/app.css"/>
 </head>
-
-<body>
-<button type="submit">Missing Documents Report</button>
-
+<body ng-app="demo">
+<hr/>
+<div class="container" ng-controller="UserController">
+    <div>Upload Doc --
+        <form id="uploadDocForm" action="/paperless/upload" method="POST">
+            <div>
+            <select name="documentType" ng-model="documentType" ng-options="doc for doc in pendingDocs"></select>
+                <input name="file" type="file" value="UploadDoc"/>
+            <input name="name" type="hidden" value="shripati.bhat"/>
+            </div>
+            <input type="submit" name="Submit" value="Submit"/>
+        </form>
+    </div>
+</div>
 </body>
-
 </html>

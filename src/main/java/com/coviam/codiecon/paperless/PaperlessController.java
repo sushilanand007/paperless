@@ -1,6 +1,14 @@
 package com.coviam.codiecon.paperless;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +23,7 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Map;
 
+@RequestMapping("/paperless")
 @RestController
 public class PaperlessController {
 
@@ -24,7 +33,7 @@ public class PaperlessController {
   @Autowired
   private UserService userService;
 
-  @RequestMapping(value = "/paperless/upload", method = {RequestMethod.POST})
+  @RequestMapping(value = "/upload", method = {RequestMethod.POST}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
   @ResponseBody
   public Boolean uploadFile(@RequestParam("file") MultipartFile multipartFile,
       @RequestParam String documentType, @RequestParam String name) {
@@ -47,7 +56,7 @@ public class PaperlessController {
     }
   }
 
-  @RequestMapping(value = "/paperless/missingDoc", method = {RequestMethod.GET})
+  @RequestMapping(value = "/missing-doc", method = {RequestMethod.GET}, consumes = {MediaType.ALL_VALUE})
   @ResponseBody
   public List<String> fetchMissingDocuments(@RequestParam String name) {
 
@@ -59,13 +68,13 @@ public class PaperlessController {
     }
   }
 
-  @RequestMapping(value = "/paperless/users", method = {RequestMethod.GET})
+  @RequestMapping(value = "/users", method = {RequestMethod.GET})
   @ResponseBody
   public List<String> getUserList(@RequestParam(required = false) String name) {
     return userService.getUserList(name);
   }
 
-  @RequestMapping(value = "/paperless/report", method = {RequestMethod.GET})
+  @RequestMapping(value = "/report", method = {RequestMethod.GET})
   @ResponseBody
   public Map<String, List<String>> getReport() {
     try {
@@ -75,5 +84,4 @@ public class PaperlessController {
       return null;
     }
   }
-
 }
