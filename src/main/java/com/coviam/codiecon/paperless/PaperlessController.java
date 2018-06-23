@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class PaperlessController {
@@ -22,10 +23,11 @@ public class PaperlessController {
   @RequestMapping(value = "/paperless/upload", method = {RequestMethod.POST})
   @ResponseBody
   public Boolean uploadFile(@RequestBody UploadFileModel model) {
-    // TODO set file and pass
-    File file = null;
+
     String mimeType = model.getFile().getContentType().split("/")[0];
     try {
+      File file = new File(model.getFile().getOriginalFilename());
+      model.getFile().transferTo(file);
       return paperlessService
           .uploadDocument(model.getDocumentType(), model.getName(), file, mimeType);
     } catch (IOException | GeneralSecurityException e) {
@@ -36,7 +38,7 @@ public class PaperlessController {
 
   @RequestMapping(value = "/paperless/missingDoc", method = {RequestMethod.GET})
   @ResponseBody
-  public List<String> uploadFile(@RequestParam String name) {
+  public List<String> fetchMissingDocuments(@RequestParam String name) {
 
     try {
       return paperlessService.getMissingDocument(name);
@@ -46,5 +48,27 @@ public class PaperlessController {
     }
   }
 
+  @RequestMapping(value = "/paperless/users", method = {RequestMethod.GET})
+  @ResponseBody
+  public List<String> getUserList() {
+
+    try {
+      return paperlessService.getUserList();
+    } catch (IOException | GeneralSecurityException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  @RequestMapping(value = "/paperless/report", method = {RequestMethod.GET})
+  @ResponseBody
+  public Map<String, List<String>> getReport() {
+    try {
+      return paperlessService.missingDocumentsReport();
+    } catch (IOException | GeneralSecurityException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
 
 }
