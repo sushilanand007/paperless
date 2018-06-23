@@ -1,15 +1,15 @@
 package com.coviam.codiecon.paperless;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
  * Created by Sushil on 23/06/18.
  */
 @SpringBootApplication
-@EnableWebSecurity
+@EnableOAuth2Sso
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -18,23 +18,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .disable()
             .antMatcher("/**")
             .authorizeRequests()
-            .antMatchers("/", "/admin.html")
+            .antMatchers("/", "/admin.html","/oauth/authorize", "/oauth/confirm_access")
             .permitAll()
             .anyRequest()
             .authenticated();
     }
-//
-//    @Bean
-//    @ConfigurationProperties("google.client")
-//    public AuthorizationCodeResourceDetails google() {
-//        return new AuthorizationCodeResourceDetails();
-//    }
-//
-//    @Bean
-//    @ConfigurationProperties("google.resource")
-//    public ResourceServerProperties googleResource() {
-//        return new ResourceServerProperties();
-//    }
-
 }
 
