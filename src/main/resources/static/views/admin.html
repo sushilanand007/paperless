@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Main Page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/UserController.js"></script>
+    <script src="js/UserService.js"></script>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/app.css"/>
+    <style>
+  /* Style the input field */
+  #myInput {
+    padding: 20px;
+    margin-top: -6px;
+    border: 0;
+    border-radius: 0;
+    background: #f1f1f1;
+  }
+
+    </style>
+</head>
+<body ng-app="demo">
+
+<div class="container" ng-controller="UserController"  ng-init="adminPage()">
+    <input type="hidden" ng-model="isAdminPage" value="true"/>
+    <h2>Missing Document Report</h2>
+    <p>Select the user name or get report for all</p>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">type
+            username
+            <span class="caret"></span></button>
+
+        <ul class="dropdown-menu">
+            <input class="form-control" id="myInput" type="text" placeholder="Search..">
+            <li ng-repeat="user in userList" ng-click="getPendingDocs()">{{user}}</li>
+            <!--select class="btn btn-primary dropdown-toggle" id="myInputTemp" type="text" data-toggle="dropdown" placeholder="Search.." name="name" ng-model="name" ng-options="user for user in userList">type username</select-->
+        </ul>
+    </div>
+
+    <div id="pendingToUpload" ng-if="showMissingDocs == true">
+            <li ng-repeat="doc in pendingDocs">{{doc}}</li>
+    </div>
+
+</div>
+
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $(".dropdown-menu li").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+
+</script>
+
+</body>
+</html>

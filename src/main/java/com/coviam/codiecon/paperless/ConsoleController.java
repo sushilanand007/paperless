@@ -12,4 +12,9 @@ public class ConsoleController {
     return "console";
   }
 
+  @GetMapping("/admin")
+  public String adminPage(ModelMap model) {
+    return "admin";
+  }
+
 }

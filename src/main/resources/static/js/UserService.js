@@ -18,7 +18,10 @@ angular.module('demo.services', []).factory('UserService', ["$http", "CONSTANTS"
             return $http.get('/paperless/getUsername');
     }
     service.submitFile = function(request) {
-    return $http(request);
+        return $http(request);
+    }
+    service.getAllUsers = function(name) {
+        return $http.get('/paperless/users?name='+name);
     }
     return service;
 }]);

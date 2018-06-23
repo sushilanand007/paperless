@@ -62,6 +62,7 @@ module.controller("UserController", ["$scope", "$http","UserService",
         $scope.getPendingDocs =function() {
             UserService.getPendingDocs($scope.username).then(function(data) {
                 $scope.pendingDocs = data.data;
+                $scope.showMissingDocs = true;
             });
         }
           $scope.getUsername =function() {
@@ -72,5 +73,20 @@ module.controller("UserController", ["$scope", "$http","UserService",
           }
 
         $scope.getUsername();
+            $scope.getPendingDocs();
+
+
+        $scope.getAllUsers =function() {
+            UserService.getAllUsers('').then(function(data) {
+                $scope.userList = data.data;
+            });
+        }
+
+        $scope.adminPage = function(){
+            $scope.isAdminPage=true;
+        }
+
+        $scope.showMissingDocs = false;
+        $scope.getAllUsers();
     }
 ]);

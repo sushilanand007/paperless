@@ -25,7 +25,7 @@ public class UserService {
 
   public UserModel findUser(String name) {
     User user = userRepository.findByNameIgnoreCase(name);
-    if (null != user) {
+    if (null != user && !name.isEmpty()) {
       UserModel userModel = new UserModel();
       userModel.setName(user.getName());
       userModel.setUserType(user.getType());
@@ -37,7 +37,7 @@ public class UserService {
 
   public List<String> getUserList(String name) {
     List<User> users = null;
-    if (null == name) {
+    if (null == name || name.isEmpty()) {
       users = userRepository.findAll();
     } else {
       users = userRepository.findByNameContains(name);
