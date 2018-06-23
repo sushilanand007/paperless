@@ -61,7 +61,7 @@ public class PaperlessService {
 
   public List<String> getMissingDocument(String name) throws IOException, GeneralSecurityException {
     List<DocumentTypes> missingDocuments = new ArrayList<>(Arrays.asList(DocumentTypes.values()));
-    String nameQuery = "name contains '" + name + "'";
+    String nameQuery = "name contains '" + name + "' and trashed = false";
     FileList result =
         getDriveService().files().list().setIncludeTeamDriveItems(true).setPageSize(10)
             .setQ(nameQuery).setSupportsTeamDrives(true).setPageSize(10).execute();
@@ -85,8 +85,8 @@ public class PaperlessService {
 
   public boolean uploadDocument(DocumentTypes documentType, String name, java.io.File file,
       String mimeType) throws IOException, GeneralSecurityException {
-    String folderQuery =
-        "name = '" + name + "' and mimeType = 'application/vnd.google-apps.folder'";
+    String folderQuery = "name = '" + name
+        + "' and mimeType = 'application/vnd.google-apps.folder' and trashed = false";
     List<File> result =
         getDriveService().files().list().setIncludeTeamDriveItems(true).setQ(folderQuery)
             .setSupportsTeamDrives(true).setPageSize(1).execute().getFiles();
