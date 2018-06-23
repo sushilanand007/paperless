@@ -1,14 +1,9 @@
 package com.coviam.codiecon.paperless;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,18 +15,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequestMapping("/paperless")
 @RestController
 public class PaperlessController {
 
-  @Autowired
-  private PaperlessService paperlessService;
+  @Autowired private PaperlessService paperlessService;
 
-  @Autowired
-  private UserService userService;
+  @Autowired private UserService userService;
 
   @RequestMapping(value = "/upload", method = {RequestMethod.POST}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
   @ResponseBody
@@ -68,14 +64,12 @@ public class PaperlessController {
     }
   }
 
-  @RequestMapping(value = "/users", method = {RequestMethod.GET})
-  @ResponseBody
+  @RequestMapping(value = "/users", method = {RequestMethod.GET}) @ResponseBody
   public List<String> getUserList(@RequestParam(required = false) String name) {
     return userService.getUserList(name);
   }
 
-  @RequestMapping(value = "/report", method = {RequestMethod.GET})
-  @ResponseBody
+  @RequestMapping(value = "/report", method = {RequestMethod.GET}) @ResponseBody
   public Map<String, List<String>> getReport() {
     try {
       return paperlessService.missingDocumentsReport();
@@ -83,5 +77,36 @@ public class PaperlessController {
       e.printStackTrace();
       return null;
     }
+  }
+
+  @RequestMapping(value = "/getUsername", method = {RequestMethod.GET}) @ResponseBody
+  public String getUsername() {
+    OAuth2Authentication auth2Authentication =
+        (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();
+    String email = ((LinkedHashMap) auth2Authentication.getUserAuthentication().getDetails()).get("email")
+        .toString();
+    return email.split("@")[0];
+  }
+
+  public String isValidCoviamEmailAddress(String email) {
+    String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(coviam.com)$";
+    Pattern p1 = Pattern.compile(ePattern);
+    Matcher m1 = p1.matcher(email);
+    if (m1.matches()){
+      return email.split("@")[0];
+    }
+    return "Not a covaim email. login from coviam email";
+  }
+
+
+  public String isValidEmailAddress(String email) {
+    String ePattern =
+        "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+    Pattern p1 = Pattern.compile(ePattern);
+    Matcher m1 = p1.matcher(email);
+    if (m1.matches()){
+      return email.split("@")[0];
+    }
+    return "Not a covaim email. login from coviam email";
   }
 }
