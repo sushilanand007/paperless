@@ -60,10 +60,17 @@ module.controller("UserController", ["$scope", "$http","UserService",
         };
 
         $scope.getPendingDocs =function() {
-            UserService.getPendingDocs('shripati.bhat').then(function(data) {
+            UserService.getPendingDocs($scope.username).then(function(data) {
                 $scope.pendingDocs = data.data;
             });
         }
-        $scope.getPendingDocs();
+          $scope.getUsername =function() {
+                    UserService.getUsername().then(function(response) {
+                        $scope.username = response.data.name;
+                        $scope.getPendingDocs();
+                    });
+          }
+
+        $scope.getUsername();
     }
 ]);

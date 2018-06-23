@@ -1,15 +1,5 @@
 package com.coviam.codiecon.paperless;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +10,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequestMapping("/paperless")
 @RestController
@@ -79,13 +79,17 @@ public class PaperlessController {
     }
   }
 
-  @RequestMapping(value = "/getUsername", method = {RequestMethod.GET}) @ResponseBody
-  public String getUsername() {
+  @RequestMapping(value = "/getUsername", method = {RequestMethod.GET})
+  @ResponseBody
+  public UserModel getUsername() {
     OAuth2Authentication auth2Authentication =
         (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();
     String email = ((LinkedHashMap) auth2Authentication.getUserAuthentication().getDetails()).get("email")
         .toString();
-    return email.split("@")[0];
+    UserModel userModel = new UserModel();
+    userModel.setName(email.split("@")[0]);
+    userModel.setUserType(UserType.USER);
+    return userModel;
   }
 
   public String isValidCoviamEmailAddress(String email) {
