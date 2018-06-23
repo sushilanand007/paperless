@@ -10,19 +10,21 @@
     <script src="js/UserService.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/app.css"/>
+    <link rel="icon" type="image/png" href="images/icon.png"/>
 </head>
 <body ng-app="demo">
-<hr/>
 <div class="container" ng-controller="UserController">
-    <div>Upload Doc --
-        <form id="uploadDocForm" action="/paperless/upload" method="POST">
-            <div>
+    <div ng-if="pendingDocs.length > 0">Upload Doc --
+        <div>
             <select name="documentType" ng-model="documentType" ng-options="doc for doc in pendingDocs"></select>
-                <input name="file" type="file" value="UploadDoc"/>
-            <input name="name" type="hidden" value="shripati.bhat"/>
-            </div>
-            <input type="submit" name="Submit" value="Submit"/>
-        </form>
+                <input name="file" type="file" value="UploadDoc" ng-files="getTheFiles($files)"/>
+            <input name="name" ng-model="username" type="hidden" value="shripati.bhat"/>
+        </div>
+        <input type="button" ng-click="uploadFiles()" name="Submit" value="Submit"/>
+    </div>
+    <div ng-if="pendingDocs.length == 0">
+        
+        You have uploaded all your docs. Congratulations.
     </div>
 </div>
 </body>

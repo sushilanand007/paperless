@@ -1,7 +1,21 @@
 'use strict'
 var module = angular.module('demo.controllers', []);
-module.controller("UserController", ["$scope", "UserService",
-    function($scope, UserService) {
+module.directive('ngFiles', ['$parse', function ($parse) {
+
+                   function fn_link(scope, element, attrs) {
+                       var onChange = $parse(attrs.ngFiles);
+                       element.on('change', function (event) {
+                           onChange(scope, { $files: event.target.files });
+                       });
+                   };
+
+                   return {
+                       link: fn_link
+                   }
+               } ]);
+
+module.controller("UserController", ["$scope", "$http","UserService",
+    function($scope, $http, UserService) {
         $scope.userDto = {
             userId: null,
             userName: null,
@@ -15,6 +29,35 @@ module.controller("UserController", ["$scope", "UserService",
 //        }, function(value) {
 //            console.log("no callback");
 //        });
+
+        var formdata = new FormData();
+        $scope.getTheFiles = function($files) {
+            angular.forEach($files, function(value, key) {
+                formdata.append("file", value);
+            });
+        };
+
+        $scope.uploadFiles = function () {
+        formdata.append('documentType',$scope.documentType);
+        formdata.append('name',$scope.username);
+        var request = {
+            method: 'POST',
+            url: '/paperless/upload',
+            data: formdata,
+            headers: {
+            'Content-Type': undefined
+            }
+        };
+        // SEND THE FILES.
+        $http(request)
+            .success(function (d) {
+            alert(d);
+            formdata = new FormData();
+            })
+            .error(function () {
+            formdata = new FormData();
+            });
+        };
 
         $scope.getPendingDocs =function() {
             UserService.getPendingDocs('shripati.bhat').then(function(data) {

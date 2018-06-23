@@ -14,5 +14,8 @@ angular.module('demo.services', []).factory('UserService', ["$http", "CONSTANTS"
     service.getPendingDocs = function(name) {
         return $http.get('/paperless/missing-doc?name='+name);
     }
+    service.submitFile = function(request) {
+    return $http(request);
+    }
     return service;
 }]);
