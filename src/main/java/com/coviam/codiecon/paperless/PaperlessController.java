@@ -20,6 +20,9 @@ public class PaperlessController {
   @Autowired
   private PaperlessService paperlessService;
 
+  @Autowired
+  private UserService userService;
+
   @RequestMapping(value = "/paperless/upload", method = {RequestMethod.POST})
   @ResponseBody
   public Boolean uploadFile(@RequestBody UploadFileModel model) {
@@ -29,7 +32,8 @@ public class PaperlessController {
       File file = new File(model.getFile().getOriginalFilename());
       model.getFile().transferTo(file);
       return paperlessService
-          .uploadDocument(model.getDocumentType(), model.getName(), file, mimeType);
+          .uploadDocument(DocumentTypes.valueOf(model.getDocumentType()), model.getName(), file,
+              mimeType);
     } catch (IOException | GeneralSecurityException e) {
       e.printStackTrace();
       return false;
@@ -50,14 +54,8 @@ public class PaperlessController {
 
   @RequestMapping(value = "/paperless/users", method = {RequestMethod.GET})
   @ResponseBody
-  public List<String> getUserList() {
-
-    try {
-      return paperlessService.getUserList();
-    } catch (IOException | GeneralSecurityException e) {
-      e.printStackTrace();
-      return null;
-    }
+  public List<String> getUserList(@RequestParam(required = false) String name) {
+    return userService.getUserList(name);
   }
 
   @RequestMapping(value = "/paperless/report", method = {RequestMethod.GET})
