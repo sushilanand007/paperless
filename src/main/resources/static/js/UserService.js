@@ -23,5 +23,8 @@ angular.module('demo.services', []).factory('UserService', ["$http", "CONSTANTS"
     service.getAllUsers = function(name) {
         return $http.get('/paperless/users?name='+name);
     }
+    service.getAllUserReport = function() {
+        return $http.get('/paperless/report');
+    }
     return service;
 }]);

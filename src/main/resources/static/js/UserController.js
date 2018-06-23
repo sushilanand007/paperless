@@ -62,6 +62,13 @@ module.controller("UserController", ["$scope", "$http","UserService",
         $scope.getPendingDocs =function() {
             UserService.getPendingDocs($scope.username).then(function(data) {
                 $scope.pendingDocs = data.data;
+            });
+        }
+
+        $scope.showMissingDocs = false;
+        $scope.getPendingDocsForUser =function(name) {
+            UserService.getPendingDocs(name).then(function(data) {
+                $scope.pendingDocs = data.data;
                 $scope.showMissingDocs = true;
             });
         }
@@ -82,11 +89,18 @@ module.controller("UserController", ["$scope", "$http","UserService",
             });
         }
 
-        $scope.adminPage = function(){
-            $scope.isAdminPage=true;
+        $scope.getAllUsers();
+
+        $scope.getAllUserReport = function(){
+            UserService.getAllUserReport().then(function(data){
+                $scope.userReport = data.data
+            });
         }
 
-        $scope.showMissingDocs = false;
-        $scope.getAllUsers();
+        $scope.toggleTable = false;
+        $scope.toggleTableFunction = function() {
+            $scope.toggleTable = !$scope.toggleTable;
+        };
+
     }
 ]);
