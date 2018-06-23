@@ -32,7 +32,8 @@ public class PaperlessController {
       File file = new File(model.getFile().getOriginalFilename());
       model.getFile().transferTo(file);
       return paperlessService
-          .uploadDocument(model.getDocumentType(), model.getName(), file, mimeType);
+          .uploadDocument(DocumentTypes.valueOf(model.getDocumentType()), model.getName(), file,
+              mimeType);
     } catch (IOException | GeneralSecurityException e) {
       e.printStackTrace();
       return false;

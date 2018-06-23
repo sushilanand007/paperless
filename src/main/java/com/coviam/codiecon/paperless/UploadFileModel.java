@@ -3,16 +3,16 @@ package com.coviam.codiecon.paperless;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UploadFileModel {
-  private DocumentTypes documentType;
+  private String documentType;
   private String name;
   private MultipartFile file;
 
 
-  public DocumentTypes getDocumentType() {
+  public String getDocumentType() {
     return documentType;
   }
 
-  public void setDocumentType(DocumentTypes documentType) {
+  public void setDocumentType(String documentType) {
     this.documentType = documentType;
   }
 
