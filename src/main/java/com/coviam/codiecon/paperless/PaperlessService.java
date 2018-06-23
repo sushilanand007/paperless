@@ -13,6 +13,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -36,6 +37,9 @@ public class PaperlessService {
   private static final String CLIENT_SECRET = "a2uzHX3MGBi2H5mkhuzVQmqo";
   private static final String REFRESH_TOKEN_GOOGLE =
       "1/0rCvzYCOPYytzoxpqhI2rMmQhBwLJ_f3OB72Zzh59tM";
+
+  @Autowired
+  private UserRepository userRepository;
 
   private Credential getCredentials() throws IOException, GeneralSecurityException {
     RefreshTokenRequest request =
@@ -110,15 +114,13 @@ public class PaperlessService {
     return true;
   }
 
-  public List<String> getUserList() throws IOException, GeneralSecurityException {
-    List<File> userFolders = getDriveService().files().list().setQ(
-        "mimeType = 'application/vnd.google-apps.folder' and '1aAQIiTRH5IxsuNtm4bwCW8f0UeeWw574' in parents")
-        .setSupportsTeamDrives(true).setPageSize(1000).setIncludeTeamDriveItems(true).execute()
-        .getFiles();
-    List<String> userList = new ArrayList<>();
-    if (userFolders != null && !userFolders.isEmpty()) {
-      for (File folder : userFolders) {
-        userList.add(folder.getName());
+  public List<String> getUserList() {
+    List<User> users = userRepository.findAll();
+
+    List<String> userList = new ArrayList<>(users.size());
+    if (users != null && !users.isEmpty()) {
+      for (User user : users) {
+        userList.add(user.getName());
       }
     }
     return userList;
