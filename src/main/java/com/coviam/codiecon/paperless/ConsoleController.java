@@ -16,5 +16,4 @@ public class ConsoleController {
   public String adminPage(ModelMap model) {
     return "admin";
   }
-
 }

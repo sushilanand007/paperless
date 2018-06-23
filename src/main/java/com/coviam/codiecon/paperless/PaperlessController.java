@@ -86,9 +86,13 @@ public class PaperlessController {
         (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();
     String email = ((LinkedHashMap) auth2Authentication.getUserAuthentication().getDetails()).get("email")
         .toString();
+    String username = email.split("@")[0];
+    UserModel user = userService.findUser(username);
+    if(user == null) {
+      userService.createUser(username, UserType.USER);
+    }
     UserModel userModel = new UserModel();
-    userModel.setName(email.split("@")[0]);
-    userModel.setUserType(UserType.USER);
+    userModel.setName(username);
     return userModel;
   }
 
