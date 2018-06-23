@@ -20,7 +20,9 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PaperlessService {
@@ -33,7 +35,7 @@ public class PaperlessService {
       "406326851056-7uj1fu5k8t4bc4mguron4fjl7k2tgq0t.apps.googleusercontent.com";
   private static final String CLIENT_SECRET = "a2uzHX3MGBi2H5mkhuzVQmqo";
   private static final String REFRESH_TOKEN_GOOGLE =
-      "1/eXzOKa__RWo8zBPUuNPgx5qj93g_wy79DREPkhk4OME";
+      "1/0rCvzYCOPYytzoxpqhI2rMmQhBwLJ_f3OB72Zzh59tM";
 
   private Credential getCredentials() throws IOException, GeneralSecurityException {
     RefreshTokenRequest request =
@@ -79,11 +81,11 @@ public class PaperlessService {
 
   public boolean uploadDocument(DocumentTypes documentType, String name, java.io.File file,
       String mimeType) throws IOException, GeneralSecurityException {
-    boolean success = false;
-    String nameQuery = "name = '" + name + "'";
+    String folderQuery =
+        "name = '" + name + "' and mimeType = 'application/vnd.google-apps.folder'";
     List<File> result =
         getDriveService().files().list().setIncludeTeamDriveItems(true).setPageSize(10)
-            .setQ(nameQuery).setSupportsTeamDrives(true).setPageSize(1).execute().getFiles();
+            .setQ(folderQuery).setSupportsTeamDrives(true).setPageSize(1).execute().getFiles();
     String folderId = null;
     if (null == result || result.isEmpty()) {
       File fileMetadata = new File();
@@ -108,4 +110,30 @@ public class PaperlessService {
     return true;
   }
 
+  public List<String> getUserList() throws IOException, GeneralSecurityException {
+    List<File> userFolders = getDriveService().files().list().setQ(
+        "mimeType = 'application/vnd.google-apps.folder' and '1aAQIiTRH5IxsuNtm4bwCW8f0UeeWw574' in parents")
+        .setSupportsTeamDrives(true).setPageSize(1000).setIncludeTeamDriveItems(true).execute()
+        .getFiles();
+    List<String> userList = new ArrayList<>();
+    if (userFolders != null && !userFolders.isEmpty()) {
+      for (File folder : userFolders) {
+        userList.add(folder.getName());
+      }
+    }
+    return userList;
+  }
+
+  public Map<String, List<String>> missingDocumentsReport()
+      throws IOException, GeneralSecurityException {
+    List<String> users = getUserList();
+    if (!users.isEmpty()) {
+      Map<String, List<String>> result = new HashMap<>();
+      for (String user : users) {
+        result.put(user, getMissingDocument(user));
+      }
+      return result;
+    }
+    return null;
+  }
 }
