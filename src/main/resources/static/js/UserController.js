@@ -57,7 +57,7 @@ module.controller("UserController", ["$scope", "$http","UserService",
             return;
         }
 
-        formdata.append('documentType',null);
+        formdata.append('documentType',$scope.documentType);
         formdata.append('name',$scope.username);
         var request = {
             method: 'POST',
