@@ -25,11 +25,14 @@ import java.util.regex.Pattern;
 @RestController
 public class PaperlessController {
 
-  @Autowired private PaperlessService paperlessService;
+  @Autowired
+  private PaperlessService paperlessService;
 
-  @Autowired private UserService userService;
+  @Autowired
+  private UserService userService;
 
-  @RequestMapping(value = "/upload", method = {RequestMethod.POST}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @RequestMapping(value = "/upload", method = {RequestMethod.POST},
+      consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @ResponseBody
   public Boolean uploadFile(@RequestParam("file") MultipartFile multipartFile,
       @RequestParam String documentType, @RequestParam String name) {
@@ -52,7 +55,8 @@ public class PaperlessController {
     }
   }
 
-  @RequestMapping(value = "/missing-doc", method = {RequestMethod.GET}, consumes = {MediaType.ALL_VALUE})
+  @RequestMapping(value = "/missing-doc", method = {RequestMethod.GET},
+      consumes = {MediaType.ALL_VALUE})
   @ResponseBody
   public List<String> fetchMissingDocuments(@RequestParam String name) {
 
@@ -64,12 +68,14 @@ public class PaperlessController {
     }
   }
 
-  @RequestMapping(value = "/users", method = {RequestMethod.GET}) @ResponseBody
+  @RequestMapping(value = "/users", method = {RequestMethod.GET})
+  @ResponseBody
   public List<String> getUserList(@RequestParam(required = false) String name) {
     return userService.getUserList(name);
   }
 
-  @RequestMapping(value = "/report", method = {RequestMethod.GET}) @ResponseBody
+  @RequestMapping(value = "/report", method = {RequestMethod.GET})
+  @ResponseBody
   public Map<String, List<String>> getReport() {
     try {
       return paperlessService.missingDocumentsReport();
@@ -84,23 +90,27 @@ public class PaperlessController {
   public UserModel getUsername() {
     OAuth2Authentication auth2Authentication =
         (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();
-    String email = ((LinkedHashMap) auth2Authentication.getUserAuthentication().getDetails()).get("email")
-        .toString();
+    String email =
+        ((LinkedHashMap) auth2Authentication.getUserAuthentication().getDetails()).get("email")
+            .toString();
     String username = email.split("@")[0];
     UserModel user = userService.findUser(username);
-    if(user == null) {
+    if (user == null) {
       userService.createUser(username, UserType.USER);
+      UserModel userModel = new UserModel();
+      userModel.setName(username);
+      userModel.setUserType(UserType.USER);
+      return userModel;
+    } else {
+      return user;
     }
-    UserModel userModel = new UserModel();
-    userModel.setName(username);
-    return userModel;
   }
 
   public String isValidCoviamEmailAddress(String email) {
     String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(coviam.com)$";
     Pattern p1 = Pattern.compile(ePattern);
     Matcher m1 = p1.matcher(email);
-    if (m1.matches()){
+    if (m1.matches()) {
       return email.split("@")[0];
     }
     return "Not a covaim email. login from coviam email";
@@ -112,7 +122,7 @@ public class PaperlessController {
         "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
     Pattern p1 = Pattern.compile(ePattern);
     Matcher m1 = p1.matcher(email);
-    if (m1.matches()){
+    if (m1.matches()) {
       return email.split("@")[0];
     }
     return "Not a covaim email. login from coviam email";
