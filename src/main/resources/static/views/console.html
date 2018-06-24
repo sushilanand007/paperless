@@ -22,7 +22,7 @@
         <div class="upload-doc-div">Upload Documents</div>
         <form name="submitForm">
             <div class="form-group row">
-                <label for="documentType" class="col-sm-2 col-form-label">Document Type</label>
+                <label for="documentType" class="col-sm-2 col-form-label width-14">Document Type</label>
                 <select class="form-control width-30 col-sm-8" id="documentType" name="documentType" ng-model="documentType" ng-change="chngFunc(documentType)"
                         ng-options="doc for doc in pendingDocs" required></select>
                 <small id="docHelp" class="col-sm-2 text-danger margin-top-10" ng-show="submitted && documentTypeError">
@@ -30,14 +30,24 @@
                 </small>
             </div>
             <div class="form-group row">
-                <label for="docFile" class="col-sm-2 col-form-label">Select File</label>
-                <input class="form-control width-30 col-sm-8" name="file" type="file" id="docFile" ng-files="getTheFiles($files)" required/>
+                <label for="docFile" class="col-sm-2 col-form-label width-14">Select File</label>
+                <div class="input-group width-30 col-sm-8">
+                    <label class="input-group-btn">
+                    <span class="btn btn-primary">
+                        Browse... <input class="form-control width-30 col-sm-8" style="display: none;" name="file" type="file" id="docFile" ng-files="getTheFiles($files)"/>
+                    </span>
+                    </label>
+                    <input type="text" class="form-control" id="readFileUpload" ng-model="readFileUpload" readonly="" style="background: white;"/>
+                </div>
                 <small id="fileHelp" class="col-sm-2 text-danger margin-top-10" ng-show="submitted && fileError">
                     Select File
                 </small>
             </div>
 
-            <div id="submitDiv"><input type="button" ng-click="uploadFiles()" name="Submit" value="Submit"/></div>
+            <div id="submitDiv" class="form-group row">
+                <div class="col-sm-2 width-14"></div>
+                <div class="width-30 col-sm-8"><input type="button" ng-click="uploadFiles()" name="Submit" value="Submit" class="btn btn-success submit-btn"/></div>
+            </div>
         </form>
 
     </div>

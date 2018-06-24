@@ -35,6 +35,10 @@ input.spacing{
     width:30%;
 }
 
+.width-14 {
+    width:14%;
+}
+
 .upload-doc-div {
     height:40px;
     margin-top : 20px;
@@ -47,6 +51,7 @@ input.spacing{
 .welcome {
     text-align: center;
     font-size: x-large;
+    color : white;
 }
 
 .header {
@@ -59,4 +64,9 @@ input.spacing{
     float : left;
     top : 0px;
     position : absolute;
+}
+
+.submit-btn {
+    float: right;
+    margin-right: -15px;
 }

@@ -34,6 +34,8 @@ module.controller("UserController", ["$scope", "$http","UserService",
         $scope.getTheFiles = function($files) {
             angular.forEach($files, function(value, key) {
                 formdata.append("file", value);
+                $scope.readFileUpload=value.name;
+                document.getElementById("readFileUpload").value=value.name;
             });
         };
 
@@ -100,16 +102,13 @@ module.controller("UserController", ["$scope", "$http","UserService",
                     });
           }
 
-        $scope.getUsername();
-            $scope.getPendingDocs();
-
-
         $scope.getAllUsers =function() {
             UserService.getAllUsers('').then(function(data) {
                 $scope.userList = data.data;
             });
         }
 
+        $scope.getUsername();
         $scope.getAllUsers();
 
         $scope.getAllUserReport = function(){
