@@ -101,6 +101,7 @@ module.controller("UserController", ["$scope", "$http","UserService",
           $scope.getUsername =function() {
                     UserService.getUsername().then(function(response) {
                         $scope.username = response.data.name;
+                        $scope.isAdminUser = (response.data.userType == 'ADMIN');
                         $scope.getPendingDocs();
                     });
           }

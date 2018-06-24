@@ -19,7 +19,12 @@
 </div>
 <div class="container" ng-controller="UserController">
     <div ng-if="pendingDocs.length > 0">
-        <div class="upload-doc-div">Upload Documents</div>
+        <div class="upload-doc-div">
+            <div class="upload-doc-div">
+                <div style="float: left;margin-right: 300px;">Upload Documents</div>
+                <div ng-show="isAdminUser"><u><a href="/admin">View Reports</a></u></div>
+            </div>
+        </div>
         <form name="submitForm">
             <div class="form-group row">
                 <label for="documentType" class="col-sm-2 col-form-label width-14">Document Type</label>
