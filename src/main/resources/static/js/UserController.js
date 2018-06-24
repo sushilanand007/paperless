@@ -38,7 +38,24 @@ module.controller("UserController", ["$scope", "$http","UserService",
         };
 
         $scope.uploadFiles = function () {
-        formdata.append('documentType',$scope.documentType);
+
+        $scope.submitted = true;
+        if($scope.documentType === undefined || $scope.documentType == null) {
+            $scope.documentTypeError = true;
+        } else {
+            $scope.documentTypeError = false;
+        }
+        if(formdata.get("file") == null || formdata.get("file") === undefined) {
+            $scope.fileError = true;
+        } else {
+            $scope.fileError = false;
+        }
+
+        if($scope.fileError == true || $scope.documentTypeError == true) {
+            return;
+        }
+
+        formdata.append('documentType',null);
         formdata.append('name',$scope.username);
         var request = {
             method: 'POST',
@@ -49,26 +66,30 @@ module.controller("UserController", ["$scope", "$http","UserService",
             }
         };
         // SEND THE FILES.
-        $http(request)
-            .success(function (d) {
+        $scope.showLoader('submitDiv');
+        $http(request).success(function (d) {
             alert(d);
             formdata = new FormData();
+            $scope.hideLoader('submitDiv');
             })
             .error(function () {
             formdata = new FormData();
+            $scope.hideLoader('submitDiv');
             });
+
+        $scope.hideLoader('submitDiv');
         };
 
         $scope.getPendingDocs =function() {
-            UserService.getPendingDocs($scope.username).then(function(data) {
-                $scope.pendingDocs = data.data;
+            UserService.getPendingDocs($scope.username).then(function(response) {
+                $scope.pendingDocs = response.data;
             });
         }
 
         $scope.showMissingDocs = false;
         $scope.getPendingDocsForUser =function(name) {
-            UserService.getPendingDocs(name).then(function(data) {
-                $scope.pendingDocs = data.data;
+            UserService.getPendingDocs(name).then(function(response) {
+                $scope.pendingDocs = response.data;
                 $scope.showMissingDocs = true;
             });
         }
@@ -100,6 +121,24 @@ module.controller("UserController", ["$scope", "$http","UserService",
         $scope.toggleTable = false;
         $scope.toggleTableFunction = function() {
             $scope.toggleTable = !$scope.toggleTable;
+        };
+
+        $scope.chngFunc = function(item) {
+            $scope.documentType=item;
+        };
+
+        $scope.showLoader = function(divId) {
+            $scope.loading = true;
+            var myEl = angular.element( document.querySelector( divId) );
+            myEl.removeClass('loader-hidden');
+            myEl.addClass('loader-overlay');
+        };
+
+        $scope.hideLoader = function(divId) {
+            $scope.loading = false;
+            var myEl = angular.element( document.querySelector( divId) );
+            myEl.removeClass('loader-overlay');
+            myEl.addClass('loader-hidden');
         };
 
     }

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="ISO-8859-1">
-    <title>Main Page</title>
+    <title>Welcome User</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
     <script src="js/app.js"></script>
@@ -13,18 +13,37 @@
     <link rel="icon" type="image/png" href="images/icon.png"/>
 </head>
 <body ng-app="demo">
+<div class="header">
+    <div class="welcome">Welcome to Coviam</div>
+    <div class="co-logo"><img src="http://coviam.com/img/coviam_technologies-logo_whitebg.png" style="height: 45px;"></div>
+</div>
 <div class="container" ng-controller="UserController">
-    <div ng-if="pendingDocs.length > 0">Upload Doc --
-        <div>
-            <select name="documentType" ng-model="documentType" ng-options="doc for doc in pendingDocs"></select>
-                <input name="file" type="file" value="UploadDoc" ng-files="getTheFiles($files)"/>
-            <input name="name" ng-model="username" type="hidden" value=""/>
-        </div>
-        <input type="button" ng-click="uploadFiles()" name="Submit" value="Submit"/>
+    <div ng-if="pendingDocs.length > 0">
+        <div class="upload-doc-div">Upload Documents</div>
+        <form name="submitForm">
+            <div class="form-group row">
+                <label for="documentType" class="col-sm-2 col-form-label">Document Type</label>
+                <select class="form-control width-30 col-sm-8" id="documentType" name="documentType" ng-model="documentType" ng-change="chngFunc(documentType)"
+                        ng-options="doc for doc in pendingDocs" required></select>
+                <small id="docHelp" class="col-sm-2 text-danger margin-top-10" ng-show="submitted && documentTypeError">
+                    Select a Document
+                </small>
+            </div>
+            <div class="form-group row">
+                <label for="docFile" class="col-sm-2 col-form-label">Select File</label>
+                <input class="form-control width-30 col-sm-8" name="file" type="file" id="docFile" ng-files="getTheFiles($files)" required/>
+                <small id="fileHelp" class="col-sm-2 text-danger margin-top-10" ng-show="submitted && fileError">
+                    Select File
+                </small>
+            </div>
+
+            <div id="submitDiv"><input type="button" ng-click="uploadFiles()" name="Submit" value="Submit"/></div>
+        </form>
+
     </div>
     <div ng-if="pendingDocs.length == 0">
-        
-        You have uploaded all your docs. Congratulations.
+        <img src="images/done.jpg" class="done-image-center"/>
+        <br/><div class="done-image-center">You have uploaded all your docs. Congratulations.</div>
     </div>
 </div>
 </body>

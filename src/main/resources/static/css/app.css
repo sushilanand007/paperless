@@ -10,3 +10,53 @@ input.custom-width{
 input.spacing{
     margin-right: 5px;
 }
+
+.done-image-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    height: 300px;
+}
+.loader-overlay {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+.loader-hidden {
+    visibility: hidden;
+}
+
+.width-30 {
+    width:30%;
+}
+
+.upload-doc-div {
+    height:40px;
+    margin-top : 20px;
+}
+
+.margin-top-10 {
+ margin-top : 10px;
+}
+
+.welcome {
+    text-align: center;
+    font-size: x-large;
+}
+
+.header {
+    height: 50px;
+    background: #557ff7;
+}
+
+.co-logo {
+    text-align: left;
+    float : left;
+    top : 0px;
+    position : absolute;
+}
