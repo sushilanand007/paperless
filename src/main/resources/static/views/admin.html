@@ -23,28 +23,36 @@
     <input type="hidden" ng-model="isAdminPage" value="true"/>
     <div class="upload-doc-div">Missing Document Report</div>
     <p>Select the user name or get report for all</p>
-    <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">type
-            username
-            <span class="caret"></span></button>
-
+    <div style="height: 60px;">
+    <div class="dropdown" style="float:left;margin-right:20px;">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Type
+            username<span class="caret"></span></button>
         <ul class="dropdown-menu">
             <li ng-repeat="user in userList" ng-click="getPendingDocsForUser(user)">{{user}}</li>
         </ul>
+        <input type="text" style="display:none;" name="hiddenUsername" id="hiddenUsername" ng-model="hiddenUsername" />
+    </div>
+    <div>
+        <button ng-click="getAllUserReport()" class="btn btn-default">Show all user data</button>
+    </div>
     </div>
 
-    <div id="pendingToUpload" ng-if="showMissingDocs == true">
+    <div id="pendingToUpload" ng-show="showMissingDocs">
+        <div>Username - <label>{{hiddenUsername}}</label></div>
         <li ng-repeat="doc in pendingDocs">{{doc}}</li>
     </div>
 
-    <button ng-click="toggleTableFunction(); getAllUserReport()">Show all user data</button>
-    <table ng-show="toggleTable">
+    <div id="allUsersData" ng-show="showAllUsersData">
+    <table>
+        <tr><td>Username</td><td>Pending Documents</td></tr>
         <tr ng-repeat="(key,value) in userReport">
-            <td>{{key}}</td>
-            <td>{{value}}</td>
+            <td><span>{{key}}</span></td>
+            <td>
+                <span ng-repeat="v in value">{{v}}<span ng-if="!isLastElement($last)" >, </span></span>
+            </td>
         </tr>
     </table>
-
+    </div>
 
 </div>
 

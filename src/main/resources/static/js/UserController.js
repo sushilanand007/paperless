@@ -89,10 +89,13 @@ module.controller("UserController", ["$scope", "$http","UserService",
         }
 
         $scope.showMissingDocs = false;
+        $scope.showAllUsersData = false;
         $scope.getPendingDocsForUser =function(name) {
+            $scope.hiddenUsername = name;
             UserService.getPendingDocs(name).then(function(response) {
                 $scope.pendingDocs = response.data;
                 $scope.showMissingDocs = true;
+                $scope.showAllUsersData = false;
             });
         }
           $scope.getUsername =function() {
@@ -111,11 +114,13 @@ module.controller("UserController", ["$scope", "$http","UserService",
         $scope.getUsername();
         $scope.getAllUsers();
 
-        $scope.getAllUserReport = function(){
+        $scope.getAllUserReport = function() {
             UserService.getAllUserReport().then(function(data){
-                $scope.userReport = data.data
+                $scope.userReport = data.data;
+                $scope.showMissingDocs = false;
+                $scope.showAllUsersData = true;
             });
-        }
+        };
 
         $scope.toggleTable = false;
         $scope.toggleTableFunction = function() {
@@ -139,6 +144,12 @@ module.controller("UserController", ["$scope", "$http","UserService",
             myEl.removeClass('loader-overlay');
             myEl.addClass('loader-hidden');
         };
+
+        $scope.isLastElement = function(check) {
+            var isLastElem = check ? true : false;
+            return isLastElem;
+        };
+
 
     }
 ]);
