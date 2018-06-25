@@ -52,6 +52,7 @@ input.spacing{
     text-align: center;
     font-size: x-large;
     color : white;
+    padding-top: 6px;
 }
 
 .header {
