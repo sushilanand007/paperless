@@ -21,6 +21,7 @@ module.controller("UserController", ["$scope", "$http","UserService",
             userName: null,
             skillDtos: []
         };
+        $scope.isLoaderShown = false;
         $scope.skills = [];
 //        UserService.getUserById(1).then(function(value) {
 //            console.log(value.data);
@@ -68,20 +69,22 @@ module.controller("UserController", ["$scope", "$http","UserService",
             }
         };
         // SEND THE FILES.
-        $scope.showLoader('submitDiv');
+        $scope.isLoaderShown = true;
+//        $scope.showLoader('submitDiv');
         $http(request).success(function (d) {
                 formdata = new FormData();
                 $scope.hideLoader('submitDiv');
                 $scope.successfullyUploaded = true;
                 document.getElementById("readFileUpload").value="";
                 document.getElementById('buttonOpenModal').click();
+                $scope.isLoaderShown = false;
             })
             .error(function () {
                 formdata = new FormData();
                 $scope.hideLoader('submitDiv');
             });
 
-        $scope.hideLoader('submitDiv');
+//        $scope.hideLoader('submitDiv');
         };
 
         $scope.getPendingDocs =function() {
