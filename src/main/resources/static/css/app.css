@@ -31,7 +31,7 @@ input.spacing{
     visibility: hidden;
 }
 
-.width-30 {
+.row-width-30 {
     width:30%;
 }
 
@@ -63,6 +63,7 @@ input.spacing{
     text-align: left;
     float : left;
     top : 0px;
+    left : 30px;
     position : absolute;
 }
 

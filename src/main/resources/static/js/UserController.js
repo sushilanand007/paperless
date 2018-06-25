@@ -70,13 +70,15 @@ module.controller("UserController", ["$scope", "$http","UserService",
         // SEND THE FILES.
         $scope.showLoader('submitDiv');
         $http(request).success(function (d) {
-            alert(d);
-            formdata = new FormData();
-            $scope.hideLoader('submitDiv');
+                formdata = new FormData();
+                $scope.hideLoader('submitDiv');
+                $scope.successfullyUploaded = true;
+                document.getElementById("readFileUpload").value="";
+                document.getElementById('buttonOpenModal').click();
             })
             .error(function () {
-            formdata = new FormData();
-            $scope.hideLoader('submitDiv');
+                formdata = new FormData();
+                $scope.hideLoader('submitDiv');
             });
 
         $scope.hideLoader('submitDiv');
@@ -90,6 +92,7 @@ module.controller("UserController", ["$scope", "$http","UserService",
 
         $scope.showMissingDocs = false;
         $scope.showAllUsersData = false;
+        $scope.successfullyUploaded = false;
         $scope.getPendingDocsForUser =function(name) {
             $scope.hiddenUsername = name;
             UserService.getPendingDocs(name).then(function(response) {
@@ -151,6 +154,23 @@ module.controller("UserController", ["$scope", "$http","UserService",
             return isLastElem;
         };
 
+        $scope.openModal = function(){
+            $scope.modalInstance = $uibModal.open({
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'modalWindow.html',
+                controller :'ModelHandlerController',
+                controllerAs: '$ctrl',
+                size: 'lg',
+                resolve: {
+                }
+            });
+
+        }
+
+        $scope.reloadWindow = function() {
+            window.location.reload();
+        }
 
     }
 ]);
