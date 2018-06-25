@@ -17,6 +17,9 @@ input.spacing{
     margin-right: auto;
     width: 50%;
     height: 300px;
+    width: 300px;
+    text-align : center;
+    font-size : x-large;
 }
 .loader-overlay {
   border: 16px solid #f3f3f3;
