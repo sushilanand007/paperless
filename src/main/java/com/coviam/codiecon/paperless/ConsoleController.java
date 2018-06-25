@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ConsoleController {
 
-  @GetMapping("/console")
-  public String greeting(ModelMap model) {
+  @GetMapping("/welcome")
+  public String welcome(ModelMap model) {
     return "console";
   }
 
